@@ -13,3 +13,5 @@ export type CreateUser = Omit<
 	User,
 	'id' | 'is_active' | 'created_at' | 'update_at'
 >;
+
+export type UpdateUser = Partial<Omit<User, 'id'>>;
