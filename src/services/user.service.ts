@@ -1,5 +1,5 @@
 import { connectDatabase } from '../database/connection.ts';
-import type { CreateUser, User } from '../types.ts';
+import type { CreateUser, UpdateUser, User } from '../types.ts';
 
 export async function findUsers(): Promise<User[]> {
 	const db = await connectDatabase();
@@ -50,6 +50,41 @@ export async function insertUser({
 
 	return {
 		id: result.lastID,
+		name,
+		cpf,
+		email,
+		phone,
+	} as User;
+}
+
+export async function modifyUser({
+	id,
+	name,
+	cpf,
+	email,
+	phone,
+}: UpdateUser): Promise<User | null> {
+	if (!id || !name || !cpf || !email || !phone) {
+		throw new Error('Todos os campos são obrigatórios para a atualização.');
+	}
+
+	const db = await connectDatabase();
+
+	const result = await db.run(
+		`
+		UPDATE user
+		SET name = ?, cpf = ?, email = ?, phone = ?
+		WHERE id = ?
+		`,
+		[name, cpf, email, phone, id],
+	);
+
+	if (result.changes === 0) {
+		return null;
+	}
+
+	return {
+		id,
 		name,
 		cpf,
 		email,
