@@ -43,3 +43,11 @@ export async function updateUser(request: Request, response: Response) {
 
 	response.status(200).json(user);
 }
+
+export async function deleteUser(request: Request, response: Response) {
+	const id = Number(request.params.id);
+
+	UserService.deleteUser(id);
+
+	response.status(204).send();
+}
