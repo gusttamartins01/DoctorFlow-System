@@ -91,3 +91,14 @@ export async function modifyUser({
 		phone,
 	} as User;
 }
+
+export async function deleteUser(id: number): Promise<boolean> {
+	if (!id) {
+		throw new Error('O ID é obrigatório!');
+	}
+	const db = await connectDatabase();
+
+	const result = await db.run('DELETE FROM user WHERE id = ?', [id]);
+
+	return (result?.changes ?? 0) > 0;
+}
