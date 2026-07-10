@@ -6,3 +6,11 @@ export async function getAllUser(_request: Request, response: Response) {
 
 	response.status(200).json(users);
 }
+
+export async function getUserById(request: Request, response: Response) {
+	const id = Number(request.params.id);
+
+	const user = await UserService.findUserById(id);
+
+	response.status(200).json(user);
+}
